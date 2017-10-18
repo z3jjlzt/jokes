@@ -121,6 +121,13 @@
             <version>1.2.17</version>
         </dependency>
 
+        <!--分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>jokes</finalName>
@@ -144,6 +151,8 @@
                     <configurationFile>src/main/resources/mbg/mbg.xml</configurationFile>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 </project>

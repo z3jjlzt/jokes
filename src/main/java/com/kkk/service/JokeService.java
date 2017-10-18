@@ -1,5 +1,6 @@
 package com.kkk.service;
 
+import com.kkk.bean.Joke;
 import com.kkk.bean.ResultBean;
 
 /**
@@ -9,10 +10,12 @@ public interface JokeService {
 
     ResultBean getJoke(int id);
 
-    ResultBean updateJoke(int id);
+    ResultBean getJokes(int pn);
+
+    ResultBean updateJoke(Joke joke);
 
     ResultBean deleteJoke(int id);
 
-    ResultBean addJoke(int id);
+    ResultBean addJoke(Joke joke);
 
 }

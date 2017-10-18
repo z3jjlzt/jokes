@@ -2,9 +2,11 @@ package com.kkk.bean;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class Joke {
-//    private Integer id;
+    private Integer id;
 
     private String author;
 
@@ -12,7 +14,7 @@ public class Joke {
 
     private String atag;
 
-//    private Date cdate;
+    private Date cdate;
 
     private String article;
 

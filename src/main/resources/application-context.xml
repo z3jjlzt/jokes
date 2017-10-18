@@ -39,6 +39,16 @@
         <property name="dataSource" ref="datasource"/>
         <!--指定mapper文件位置-->
         <property name="mapperLocations" value="classpath:mapping/JokeMapper.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value> </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!--使用一个MapperScannerConfigurer,它将会查找类路径下的映射器并自动将它们创建成MapperFactoryBean-->

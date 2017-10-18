@@ -1,10 +1,14 @@
 package com.kkk.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kkk.bean.Joke;
 import com.kkk.bean.ResultBean;
 import com.kkk.mapper.JokeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Create By z3jjlzt on 2017/10/17
@@ -34,17 +38,25 @@ public class JokeServiceImpl implements JokeService {
     }
 
     @Override
-    public ResultBean updateJoke(int id) {
-        return null;
+    public ResultBean getJokes(int pn) {
+        PageHelper.startPage(pn, 10);
+        List<Joke> list = jokeMapper.selectByExample(null);
+        return ResultBean.success().put("pageInfo",new PageInfo<>(list));
+    }
+
+    @Override
+    public ResultBean updateJoke(Joke joke) {
+        return ResultBean.success()
+                .put("effect_row", jokeMapper.updateByPrimaryKeySelective(joke));
     }
 
     @Override
     public ResultBean deleteJoke(int id) {
-        return null;
+        return ResultBean.success().put("effect_row", jokeMapper.deleteByPrimaryKey(id));
     }
 
     @Override
-    public ResultBean addJoke(int id) {
-        return null;
+    public ResultBean addJoke(Joke joke) {
+        return ResultBean.success().put("effect_row", jokeMapper.insertSelective(joke));
     }
 }
