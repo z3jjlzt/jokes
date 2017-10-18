@@ -1,18 +1,26 @@
-<!DOCTYPE web-app PUBLIC
-        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-        "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
-<web-app>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
     <display-name>Archetype Created Web Application</display-name>
     <!--ServletContext -> context-param -> listener -> filter -> servlet
     而同个类型之间的实际程序调用的时候的顺序是根据对应的 mapping 的顺序进行调用的。-->
-    <!--1. listen-->
 
-    <!--2. context-param-->
+    <!--1. context-param-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>index.jsp</param-value>
+        <param-value>classpath*:application-context.xml</param-value>
     </context-param>
+
+    <!--listener 一定要添加，不然会报注入bean失败，很重要！！！
+    ContextLoaderListener监听器的作用就是启动Web容器时，自动装配ApplicationContext的配置信息
+   类ContextLoaderListener主要的作用是初始化上下文WebApplicationContext（接口）的实现类：
+   org.springframework.web.context.support.XmlWebApplicationContext。-->
+    <!--2. listen-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
     <!--3. filter-->
     <filter>
@@ -21,7 +29,7 @@
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
-            <param-value>utf8</param-value>
+            <param-value>UTF-8</param-value>
         </init-param>
         <init-param>
             <param-name>forceEncoding</param-name>
@@ -43,17 +51,21 @@
         <filter-name>hiddenHttpMethodFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
     <!--4. servlet-->
     <servlet>
-        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-name>spring-mvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <!--指定springmvc上下文配置文件位置，默认在/WEB-INF/目录下-->
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>dispatcherServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>spring-mvc</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>/index.jsp</welcome-file>
-    </welcome-file-list>
 </web-app>
