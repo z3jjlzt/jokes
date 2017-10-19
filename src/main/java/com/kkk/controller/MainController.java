@@ -3,13 +3,18 @@ package com.kkk.controller;
 import com.kkk.bean.Joke;
 import com.kkk.bean.ResultBean;
 import com.kkk.service.JokeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Create By z3jjlzt on 2017/10/16
  */
 @RestController
+@Slf4j //使用lombok 可以直接使用log.xxx进行日志打印
 public class MainController {
 
     @Autowired
@@ -22,6 +27,9 @@ public class MainController {
 
     @GetMapping(value = "/jokes",produces = "application/json;charset=utf8")
     public ResultBean getJokes(Integer pn) {
+        //打印日志框架内部信息
+//        StatusPrinter.print((Context) LoggerFactory.getILoggerFactory());
+        log.info(" pn is {} ." , pn);
         return jokeService.getJokes(pn);
     }
     /**
@@ -43,7 +51,7 @@ public class MainController {
      * @return
      */
     @PutMapping(value = "/joke/{id}", produces = "application/json;charset=utf8")
-    public ResultBean updateJoke(Joke joke) {
+    public ResultBean updateJoke(@Valid Joke joke, BindingResult result) {
         return jokeService.updateJoke(joke);
     }
 
