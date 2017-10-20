@@ -1,21 +1,21 @@
 package com.kkk.service;
 
+import com.github.pagehelper.PageInfo;
 import com.kkk.bean.Joke;
-import com.kkk.bean.ResultBean;
 
 /**
  * Create By z3jjlzt on 2017/10/17
  */
 public interface JokeService {
 
-    ResultBean getJoke(int id);
+    Joke getJoke(int id);
 
-    ResultBean getJokes(int pn);
+    PageInfo<Joke> getJokes(int pn);
 
-    ResultBean updateJoke(Joke joke);
+    boolean updateJoke(Joke joke);
 
-    ResultBean deleteJoke(int id);
+    boolean deleteJoke(int id);
 
-    ResultBean addJoke(Joke joke);
+    boolean addJoke(Joke joke);
 
 }

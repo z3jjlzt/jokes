@@ -1,7 +1,7 @@
 package com.kkk.controller;
 
 import com.kkk.bean.Joke;
-import com.kkk.bean.ResultBean;
+import com.kkk.exception.BusinessExceptin;
 import com.kkk.service.JokeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +20,21 @@ public class MainController {
     @Autowired
     JokeService jokeService;
 
-    @GetMapping(value = "/joke/{id}",produces = "application/json;charset=utf8")
-    public ResultBean getJoke(@PathVariable Integer id) {
+    @GetMapping(value = "/joke/{id}", produces = "application/json;charset=utf8")
+    public Object getJoke(@PathVariable Integer id) {
+        if (id <= 0)
+            throw new BusinessExceptin("id不能小于1");
         return jokeService.getJoke(id);
     }
 
-    @GetMapping(value = "/jokes",produces = "application/json;charset=utf8")
-    public ResultBean getJokes(Integer pn) {
+    @GetMapping(value = "/jokes", produces = "application/json;charset=utf8")
+    public Object getJokes(Integer pn) {
         //打印日志框架内部信息
 //        StatusPrinter.print((Context) LoggerFactory.getILoggerFactory());
-        log.info(" pn is {} ." , pn);
+        log.info(" pn is {} .", pn);
         return jokeService.getJokes(pn);
     }
+
     /**
      * consumers 指明接收的数据编码
      * produces 指明返回给客户端的数据编码
@@ -40,7 +43,7 @@ public class MainController {
      * @return
      */
     @PostMapping(value = "/joke", consumes = "application/json;charset=utf8", produces = "application/json;charset=utf8")
-    public ResultBean addJoke(@RequestBody Joke joke) {
+    public Object addJoke(@RequestBody Joke joke) {
         return jokeService.addJoke(joke);
     }
 
@@ -51,12 +54,12 @@ public class MainController {
      * @return
      */
     @PutMapping(value = "/joke/{id}", produces = "application/json;charset=utf8")
-    public ResultBean updateJoke(@Valid Joke joke, BindingResult result) {
+    public Object updateJoke(@Valid Joke joke, BindingResult result) {
         return jokeService.updateJoke(joke);
     }
 
     @DeleteMapping(value = "/joke/{id}", produces = "application/json;charset=utf8")
-    public ResultBean deleteJoke(@PathVariable Integer id) {
+    public Object deleteJoke(@PathVariable Integer id) {
         return jokeService.deleteJoke(id);
     }
 

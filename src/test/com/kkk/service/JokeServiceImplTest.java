@@ -51,7 +51,7 @@ public class JokeServiceImplTest {
      */
     @Test
     public void testGetJoke() throws Exception {
-        mockMvc.perform(get("/jokes")
+        mockMvc.perform(get("/joke/3")
                 .param("pn","3")
                 .characterEncoding("utf8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -63,12 +63,13 @@ public class JokeServiceImplTest {
      */
     @Test
     public void testUpdateJoke() throws Exception {
-        System.out.println(mockMvc.perform(put("/joke/2")
+        System.out.println(mockMvc.perform(put("/joke/3")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("atype", "2")
                 .param("article", "mock mock mock")
-                .param("author", "mock")
+                .param("author", "mockss")
+                .param("atag","mockmvc")
         ).andDo(print()).andReturn().getResponse().getContentAsString());
     }
 

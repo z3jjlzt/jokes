@@ -3,7 +3,8 @@ package com.kkk.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkk.bean.Joke;
-import com.kkk.bean.ResultBean;
+import com.kkk.bean.JokeExample;
+import com.kkk.exception.BusinessExceptin;
 import com.kkk.mapper.JokeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,32 +32,50 @@ public class JokeServiceImpl implements JokeService {
         super();
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Override
-    public ResultBean getJoke(int id) {
-        Joke joke = jokeMapper.selectByPrimaryKey(id);
-        return ResultBean.success().put("joke", joke);
+    public Joke getJoke(int id) {
+        return jokeMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public ResultBean getJokes(int pn) {
+    public PageInfo<Joke> getJokes(int pn) {
         PageHelper.startPage(pn, 10);
         List<Joke> list = jokeMapper.selectByExample(null);
-        return ResultBean.success().put("pageInfo",new PageInfo<>(list));
+        return new PageInfo<>(list);
     }
 
     @Override
-    public ResultBean updateJoke(Joke joke) {
-        return ResultBean.success()
-                .put("effect_row", jokeMapper.updateByPrimaryKeySelective(joke));
+    public boolean updateJoke(Joke joke) {
+        int update = jokeMapper.updateByPrimaryKeySelective(joke);
+        if (update == 0) {
+            throw new BusinessExceptin("更新id为" + joke.getId() + "的记录失败");
+        }
+        return true;
     }
 
     @Override
-    public ResultBean deleteJoke(int id) {
-        return ResultBean.success().put("effect_row", jokeMapper.deleteByPrimaryKey(id));
+    public boolean deleteJoke(int id) {
+        int delNum = jokeMapper.deleteByPrimaryKey(id);
+        if (0 == delNum) {
+            throw new BusinessExceptin("删除id为" + id + "的记录失败");
+        }
+        return true;
     }
 
     @Override
-    public ResultBean addJoke(Joke joke) {
-        return ResultBean.success().put("effect_row", jokeMapper.insertSelective(joke));
+    public boolean addJoke(Joke joke) {
+        JokeExample example = new JokeExample();
+        JokeExample.Criteria criteria = example.createCriteria();
+        criteria.andAuthorEqualTo(joke.getAuthor())
+                .andAtagEqualTo(joke.getAtag());
+        if (jokeMapper.selectByExample(example).size() != 0) {
+            throw new BusinessExceptin("记录已存在，插入失败");
+        }
+        jokeMapper.insertSelective(joke);
+        return true;
     }
 }

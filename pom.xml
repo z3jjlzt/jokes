@@ -17,6 +17,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
         <!--spring相关-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -49,6 +50,25 @@
             <version>4.3.10.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>4.3.10.RELEASE</version>
+        </dependency>
+
+        <!--aspectj-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.11</version>
+        </dependency>
+
+
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -75,7 +95,6 @@
         </dependency>
 
         <!--lombok 编译时生成getsetter-->
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -140,7 +159,6 @@
             <artifactId>logback-core</artifactId>
             <version>1.2.3</version>
         </dependency>
-
         <!--<dependency>-->
         <!--<groupId>org.slf4j</groupId>-->
         <!--<artifactId>slf4j-log4j12</artifactId>-->
@@ -158,8 +176,8 @@
             <artifactId>pagehelper</artifactId>
             <version>5.1.2</version>
         </dependency>
-
     </dependencies>
+
     <build>
         <finalName>jokes</finalName>
         <plugins>
