@@ -1,4 +1,4 @@
-package com.kkk.controller;
+package com.kkk.controller.restful;
 
 import com.kkk.bean.Joke;
 import com.kkk.exception.BusinessExceptin;

@@ -46,20 +46,20 @@ public class ControllerParamAspect {
      * @param result
      * @return
      */
-    @Around("execution(* com.kkk.controller.*.*(..)) && args(..,result)")
+    @Around("execution(* com.kkk.controller.restful.*.*(..)) && args(..,result)")
     public ResultBean validateParam(ProceedingJoinPoint pjp, BindingResult result) {
         if (result.hasErrors()) {
             ResultBean fail = ResultBean.fail();
-            System.out.println(result);
             List<FieldError> errors = result.getFieldErrors();
             errors.forEach(x -> fail.put(x.getField(), x.getDefaultMessage()));
             return fail;
         } else {
-            return printParamAndProcessResult(pjp);
+            printParamAndProcessResult(pjp);
         }
+        return ResultBean.success();
     }
 
-    @Around("execution(* com.kkk.controller.*.*(..)) && !args(..,org.springframework.validation.BindingResult)")
+    @Around("execution(* com.kkk.controller.restful.*.*(..)) && !args(..,org.springframework.validation.BindingResult)")
     public ResultBean normalAspect(ProceedingJoinPoint pjp) {
         return printParamAndProcessResult(pjp);
     }

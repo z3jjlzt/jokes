@@ -9,6 +9,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>utf8</project.build.sourceEncoding>
+        <project.build.targetEncoding>utf8</project.build.targetEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -91,7 +92,8 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope>
+            <!--在使用jetty时默认不提供，所以需要-->
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!--lombok 编译时生成getsetter-->
@@ -152,7 +154,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
-            <scope>test</scope>
+            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -176,10 +178,30 @@
             <artifactId>pagehelper</artifactId>
             <version>5.1.2</version>
         </dependency>
+
+        <!--jetty embbed嵌入式-->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.7.v20170914</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>9.4.7.v20170914</version>
+        </dependency>
+        <!--提供servletHolder等-->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>9.4.7.v20170914</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>jokes</finalName>
+        <outputDirectory>/target</outputDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -188,6 +210,7 @@
                     <!--在这里解决每次reimport导致java编译器成1.5的问题-->
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>utf8</encoding>
                 </configuration>
             </plugin>
 
@@ -201,7 +224,85 @@
                 </configuration>
             </plugin>
 
+            <!--jetty maven插件-->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.7.v20170914</version>
+                <configuration>
+                    <contextPath>/jokes</contextPath>
+                    <!--<tempDirectory>${project.build.outputDirectory}/tmp.</tempDirectory>-->
+                </configuration>
+            </plugin>
 
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/conf</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>
+                                copy-dependencies
+                            </goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--jar 打包工具-->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <!-- 生成MANIFEST.MF的设置 -->
+                        <manifest>
+                            <!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 -->
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- jar启动入口类-->
+                            <mainClass>com.kkk.JettyMain</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            在Class-Path下添加配置文件的路径
+                            <Class-Path>conf/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <includes>
+                        <!-- 打jar包时，只打包class文件 -->
+                        <include>**/*.class</include>
+                    </includes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
