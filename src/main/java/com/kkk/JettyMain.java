@@ -9,6 +9,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * jetty 启动入口
  * http://www.eclipse.org/jetty/documentation/9.3.x/embedding-jetty.html
  * Create By z3jjlzt on 2017/10/23
+ *
+ * If this code is useful, it is written by z3jjlzt.
+ * If not good, I do not know who wrote.
  */
 public class JettyMain {
     public static final int PORT = 8080;
